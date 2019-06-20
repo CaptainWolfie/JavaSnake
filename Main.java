@@ -161,7 +161,6 @@ public class Main implements Runnable,KeyListener {
 		render();
 		
 		double delta = 0;
-		double delta1 = 0;
 		long now;
 		long lastTime = System.nanoTime();
 		while(running) {
@@ -169,16 +168,11 @@ public class Main implements Runnable,KeyListener {
 			now = System.nanoTime();
 			delta += (now - lastTime) / timePerTick;
 			lastTime = now;
-			delta1 += (now - lastTime) / timePerTick;
 
 			if (delta >= 1) {
 				tick();
 				render();
 				delta = 0;
-			}
-			if (delta1 >= 10) {
-				tick();
-				delta1 = 0;
 			}
 		}
 		
