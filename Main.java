@@ -106,6 +106,7 @@ public class Main implements Runnable,KeyListener {
 		g.dispose();
 	}
 		
+	boolean done = false;
 	private void tick() {
 		if (!lost) {
 			for (int i = x.size() - 1; i > 0; i--) {
@@ -116,7 +117,7 @@ public class Main implements Runnable,KeyListener {
 			}
 			
 			if (direction == directions.DOWN) {
-				if (y.get(0) * size >= HEIGHT)
+				if ((1+y.get(0)) * size >= HEIGHT)
 					y.set(0, 0);
 				else
 					y.set(0, y.get(0) + 1);
@@ -134,12 +135,13 @@ public class Main implements Runnable,KeyListener {
 					x.set(0, x.get(0) - 1);
 			}
 			else if (direction == directions.RIGHT) {
-				if (x.get(0) * size >= WIDTH)
+				if ((1+x.get(0)) * size >= WIDTH)
 					x.set(0, 0);
 				else
 					x.set(0, x.get(0) + 1);
 			}
 		}
+		done = false;
 		for (int i = 1; i < x.size(); i++) {
 			if (x.get(0) == x.get(i) && y.get(0) == y.get(i)) {
 				lost = true;
@@ -219,14 +221,24 @@ public class Main implements Runnable,KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		if (direction != directions.RIGHT && (key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT))
-			direction = directions.LEFT;
-		if (direction != directions.LEFT && (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT))
-			direction = directions.RIGHT;
-		if (direction != directions.DOWN && (key == KeyEvent.VK_W || key == KeyEvent.VK_UP))
-			direction = directions.UP;
-		if (direction != directions.UP && (key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN))
-			direction = directions.DOWN;
+		if (!done) {
+			if (direction != directions.RIGHT && (key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT)) {
+				direction = directions.LEFT;
+				done = true;
+			}
+			else if (direction != directions.LEFT && (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT)) {
+				direction = directions.RIGHT;
+				done = true;
+			}
+			else if (direction != directions.DOWN && (key == KeyEvent.VK_W || key == KeyEvent.VK_UP)) {
+				direction = directions.UP;
+				done = true;
+			}
+			else if (direction != directions.UP && (key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN)) {
+				direction = directions.DOWN;
+				done = true;
+			}
+		}
 		if (key == KeyEvent.VK_SPACE && lost) {
 			lost = false;
 			if (x.size() - max > best)
